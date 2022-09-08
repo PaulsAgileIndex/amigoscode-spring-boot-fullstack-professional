@@ -1,8 +1,8 @@
 package com.example.demo.student;
 
 import com.example.demo.student.exception.BadRequestException;
+import com.example.demo.student.exception.StudentNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -60,7 +60,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void willThrowWhenEmailIsTaken() {
+    void testAddStudentWillThrowWhenEmailIsTaken() {
         // given
         Student student = new Student(
                 "Jamila",
@@ -78,7 +78,20 @@ class StudentServiceTest {
     }
 
     @Test
-    @Disabled
     void testDeleteStudent() {
+        given(studentRepository.existsById(any())).willReturn(true);
+        underTest.deleteStudent(any());
+        verify(studentRepository).deleteById(any());
+    }
+
+    @Test
+    void testDeleteStudentWillThrowWhenStudentIdDoesNotExist() {
+        given(studentRepository.existsById(any())).willReturn(false);
+        Long studentId = 1L;
+        assertThatThrownBy(() -> underTest.deleteStudent(studentId))
+                .isInstanceOf(StudentNotFoundException.class)
+                .hasMessageContaining("Student with id " + studentId + " does not exists");
+
+        verify(studentRepository, never()).deleteById(any());
     }
 }
