@@ -1,14 +1,13 @@
 package com.example.demo;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 //@SpringBootTest
 class DemoApplicationTests {
 
-	Calculator cut = new Calculator();
+	Calculator underTest = new Calculator();
 
 	@Test
 	void itShouldAddTwoNumbers() {
@@ -17,7 +16,7 @@ class DemoApplicationTests {
 		int numberTwo = 30;
 
 		// when
-		int result = cut.add(numberOne, numberTwo);
+		int result = underTest.add(numberOne, numberTwo);
 
 		// then
 		assertThat(result).isEqualTo(50);
